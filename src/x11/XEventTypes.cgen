@@ -4,7 +4,7 @@ cat << EOF
 const char *XEventName(int type) {
 	switch(type) {
 EOF
-DIR="$(pkg-config x11 --variable=includedir)/X11"
+DIR="$("${PKG_CONFIG:-pkg-config}" x11 --variable=includedir)/X11"
 if [ -f "$DIR/X.h" ]; then
 	gawk '
 		/Event names\./,/must be bigger than any event/ {

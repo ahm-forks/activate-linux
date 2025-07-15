@@ -9,7 +9,7 @@ LDFLAGS ?= -s
 DESTDIR ?=
 PREFIX ?= /usr/local
 BINDIR ?= bin
-
+PKG_CONFIG ?= pkg-config
 MANDIR ?= $(PREFIX)/share/man
 
 # implemented backends: wayland x11 gdi
@@ -65,7 +65,7 @@ ifeq ($(filter gdi,$(<<backends>>)),gdi)
 endif
 # rebuild on optional deps change
 ifneq ($(filter libconfig,$(<<with>>)),)
-	ifneq ($(shell pkg-config --exists libconfig && echo exists),)
+	ifneq ($(shell $(PKG_CONFIG) --exists libconfig && echo exists),)
 		PKGS += libconfig
 		CFLAGS += -DLIBCONFIG
 		<<addons>> += libconfig
@@ -73,8 +73,8 @@ ifneq ($(filter libconfig,$(<<with>>)),)
 endif
 
 ifneq ($(PKGS),)
-	CFLAGS += $(shell pkg-config --cflags $(PKGS))
-	LDFLAGS += $(shell pkg-config --libs $(PKGS))
+	CFLAGS += $(shell $(PKG_CONFIG) --cflags $(PKGS))
+	LDFLAGS += $(shell $(PKG_CONFIG) --libs $(PKGS))
 endif
 
 <<sources>> := \
